@@ -15,4 +15,9 @@ export const DEFAULT_PRODUCT_FIELDS = {
   price: true,
   stock: true,
   rating: true,
+  createdAt: true,
+  category: true,
+  description: true,
+  isFeatured: true,
+  banner: true,
 };
