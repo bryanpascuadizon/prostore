@@ -9,6 +9,7 @@ When there is a code change for this file:
 
 1. npx prisma generate
 2. npx prisma migrate dev --name [migration description]
+3. npx prisma studio (to check database)
 
 ex. npx prisma migrate dev --name add_user_based_tables
 */
