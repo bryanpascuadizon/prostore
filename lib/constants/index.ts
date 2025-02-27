@@ -4,8 +4,11 @@ export const APP_DESCRIPTION =
   "Modern E-commerce store built with Next.js";
 export const SERVER_URL =
   process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-
 export const PRODUCT_LIMIT = Number(process.env.PRODUCT_LIMIT) || 4;
+export const SIGN_IN_DEFAULT_VALUES = {
+  email: "",
+  password: "",
+};
 export const DEFAULT_PRODUCT_FIELDS = {
   id: true,
   name: true,
