@@ -11,7 +11,7 @@ const Home = async () => {
   const latestProducts = await getLatestProducts();
   return (
     <>
-      <ProductList data={latestProducts} title={"New Arrivals"}/>
+      <ProductList data={latestProducts} title={"New Arrivals"} />
     </>
   );
 };
