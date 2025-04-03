@@ -28,6 +28,9 @@ const SignUpForm = () => {
       </Button>
     );
   };
+
+  console.log(data.message);
+
   return (
     <form action={action}>
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
@@ -78,8 +81,12 @@ const SignUpForm = () => {
           <SignUpButton />
         </div>
 
-        {data && !data.success && (
-          <div className="text-center text-destructive">{data.message}</div>
+        {data && !data.success && data.message && (
+          <>
+            {data.message.split(".").map((errorMessage) => (
+              <div className="text-destructive">{errorMessage}</div>
+            ))}
+          </>
         )}
 
         <div className="text-sm text-center text-muted-foreground">
