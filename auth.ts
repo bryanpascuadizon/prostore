@@ -74,19 +74,18 @@ export const config = {
 
         //if user has no name, use email
         if (user.name === "NO_NAME") {
-          token.name = user.email.split("@")[0];
+          token.name = user.email!.split("@")[0];
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              name: token.name,
+            },
+          });
         }
-
-        // Update
-        await prisma.user.update({
-          where: { id: user.id },
-          data: {
-            name: token.name,
-          },
-        });
-
-        return token;
       }
+
+      return token;
     },
   },
   secret: process.env.NEXT_AUTH_SECRET,
