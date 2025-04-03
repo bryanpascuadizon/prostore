@@ -10,11 +10,13 @@ const currency = z
 
 //SCHEMA VALIDATORS FOR INSERTING PRODUCTS
 export const insertProductSchema = z.object({
-  name: z.string().min(3, "name must be at least 3 characters"),
-  slug: z.string().min(3, "Slug must be at least 3 characters"),
-  category: z.string().min(3, "Category must be at least 3 characters"),
-  brand: z.string().min(3, "Brand must be at least 3 characters"),
-  description: z.string().min(3, "Description must be at least 3 characters"),
+  name: z.string().min(3, "Product name must be at least 3 characters"),
+  slug: z.string().min(3, "Product slug must be at least 3 characters"),
+  category: z.string().min(3, "Product category must be at least 3 characters"),
+  brand: z.string().min(3, "Product brand must be at least 3 characters"),
+  description: z
+    .string()
+    .min(3, "Product description must be at least 3 characters"),
   stock: z.coerce.number(),
   images: z.array(z.string()).min(1, "Product must have at least one image"),
   isFeatured: z.boolean(),
@@ -22,8 +24,22 @@ export const insertProductSchema = z.object({
   price: currency,
 });
 
-//Schema for signing users in
+//SCHEMA VALIDATORS FOR SIGNING IN USERS
 export const signInFormSchema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "password must be at least 6 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
+
+export const signUpFormSchema = z
+  .object({
+    name: z.string().min(3, "name must be at least 3 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Confirm password must be at least 6 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });

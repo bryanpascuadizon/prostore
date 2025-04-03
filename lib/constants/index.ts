@@ -24,3 +24,15 @@ export const DEFAULT_PRODUCT_FIELDS = {
   isFeatured: true,
   banner: true,
 };
+
+export const signInDefaultValues = {
+  email: "",
+  password: "",
+};
+
+export const signUpDefaultValues = {
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
