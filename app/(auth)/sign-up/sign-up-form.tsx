@@ -83,8 +83,10 @@ const SignUpForm = () => {
 
         {data && !data.success && data.message && (
           <>
-            {data.message.split(".").map((errorMessage) => (
-              <div className="text-destructive">{errorMessage}</div>
+            {data.message.split(".").map((errorMessage, index) => (
+              <div key={index} className="text-destructive">
+                {errorMessage}
+              </div>
             ))}
           </>
         )}
