@@ -14,6 +14,12 @@ const sampleData = {
       password: hashSync("123456", 10),
       role: "user",
     },
+    {
+      name: "Bryan",
+      email: "dizon_danielle@yahoo.com",
+      password: hashSync("qwerty", 10),
+      role: "user",
+    },
   ],
   products: [
     {
