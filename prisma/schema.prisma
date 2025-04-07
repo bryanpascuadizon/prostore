@@ -8,8 +8,9 @@
  * When there is a code change for this file:
  * 1. npx prisma generate
  * 2. npx prisma migrate dev --name [migration description]
- * 3. npx prisma studio (to check database)
  * ex. npx prisma migrate dev --name add_user_based_tables
+ * 3. npx prisma studio (to check database)
+ 
  */
 
 generator client {
@@ -103,7 +104,7 @@ model VerificationToken {
 model Cart {
   id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId        String?  @db.Uuid
-  sessionCardId String
+  sessionCartId String
   items         Json[]   @default([]) @db.Json
   itemsPrice    Decimal  @db.Decimal(12, 2)
   totalPrice    Decimal  @db.Decimal(12, 2)

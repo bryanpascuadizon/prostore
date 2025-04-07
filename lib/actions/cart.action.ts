@@ -2,15 +2,16 @@
 
 import { CartItem } from "@/types";
 import { cookies } from "next/headers";
-import { convertToPlainObject, formatError } from "../utils";
+import { calculatePrice, convertToPlainObject, formatError } from "../utils";
 import { auth } from "@/auth";
 import { checkSessionAndUserId } from "../session_utils";
 import { prisma } from "@/db/prisma";
-import { cartItemSchema } from "../validators";
+import { cartItemSchema, insertCartSchema } from "../validators";
+import { revalidatePath } from "next/cache";
 
 export const addItemToCart = async (data: CartItem) => {
   try {
-    const { session, sessionCartId, userId } = await checkSessionAndUserId();
+    const { sessionCartId, userId } = await checkSessionAndUserId();
 
     const cart = await getMyCart();
 
@@ -21,27 +22,45 @@ export const addItemToCart = async (data: CartItem) => {
       where: { id: item.productId },
     });
 
-    console.log({
-      "Session Cart Id": sessionCartId,
-      "User Id": userId,
-      "Item Requested": item,
-      "Produt Found": product,
-    });
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    if (!cart) {
+      //Create new cart object
+      const newCart = insertCartSchema.parse({
+        userId: userId,
+        items: [item],
+        sessionCartId: sessionCartId,
+        ...calculatePrice([item]),
+      });
+
+      console.log(newCart)
+
+      //Add to database
+      await prisma.cart.create({
+        data: newCart,
+      });
+    }
+
+    revalidatePath(`/product/${product.slug}`);
 
     return {
       success: true,
       message: "Item added to cart",
     };
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getMyCart = async () => {
   try {
-    const { session, sessionCartId, userId } = await checkSessionAndUserId();
+    const { sessionCartId, userId } = await checkSessionAndUserId();
 
     //Get user cart from database
     const cart = await prisma.cart.findFirst({
-      where: userId ? { userId: userId } : { sessionCardId: sessionCartId },
+      where: userId ? { userId: userId } : { sessionCartId: sessionCartId },
     });
 
     if (!cart) {

@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { CartItem } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { cookies } from "next/headers";
 import { twMerge } from "tailwind-merge";
@@ -36,4 +37,32 @@ export const formatError = (error: any) => {
   } else {
     //Handle other errors
   }
+};
+
+//Round number to 2 decimal places
+export const roundDecimal = (value: number | string) => {
+  if (typeof value === "number") {
+    return Math.round((value + Number.EPSILON) * 100) / 100;
+  } else if (typeof value === "string") {
+    return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+  } else {
+    throw new Error("Value is not a number or string");
+  }
+};
+
+//Calculate cart prices
+export const calculatePrice = (items: CartItem[]) => {
+  const itemsPrice = roundDecimal(
+      items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0)
+    ),
+    shippingPrice = roundDecimal(itemsPrice > 100 ? 0 : 10),
+    taxPrice = roundDecimal(0.15 * itemsPrice),
+    totalPrice = roundDecimal(itemsPrice + taxPrice + shippingPrice);
+
+  return {
+    itemsPrice: itemsPrice.toFixed(2),
+    shippingPrice: shippingPrice.toFixed(2),
+    taxPrice: taxPrice.toFixed(2),
+    totalPrice: totalPrice.toFixed(2),
+  };
 };
