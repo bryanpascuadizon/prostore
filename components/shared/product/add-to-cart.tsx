@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Cart, CartItem } from "@/types";
 import { Button } from "@/components/ui/button";
