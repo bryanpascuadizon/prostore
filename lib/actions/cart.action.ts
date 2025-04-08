@@ -125,8 +125,10 @@ export const removeItemFromCart = async (productId: string) => {
       );
     } else {
       //Decrease quantity
-      (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty -
-        1;
+      (cart.items as CartItem[]).find((x) => x.productId === productId)!.qty =
+        exist.qty - 1;
+
+      console.log(cart.items);
     }
 
     await prisma.cart.update({
@@ -136,6 +138,13 @@ export const removeItemFromCart = async (productId: string) => {
         ...calculatePrice(cart.items as CartItem[]),
       },
     });
+
+    revalidatePath(`/product/${product.slug}`);
+
+    return {
+      success: true,
+      message: `${product.name} was removed from cart`,
+    };
   } catch (error) {
     return {
       success: false,
