@@ -39,6 +39,23 @@ export const formatError = (error: any) => {
   }
 };
 
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
+  currency: "USD",
+  style: "currency",
+  minimumFractionDigits: 2,
+});
+
+//Format currency using CURRENCY_FORMATTER
+export const formatCurrency = (amount: number | string | null) => {
+  if (typeof amount === "number") {
+    return CURRENCY_FORMATTER.format(amount);
+  } else if (typeof amount === "string") {
+    return CURRENCY_FORMATTER.format(Number(amount));
+  } else {
+    return "NaN";
+  }
+};
+
 //Round number to 2 decimal places
 export const roundDecimal = (value: number | string) => {
   if (typeof value === "number") {

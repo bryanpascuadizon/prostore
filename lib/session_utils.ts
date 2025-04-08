@@ -11,10 +11,5 @@ export const checkSessionAndUserId = async () => {
   const session = await auth();
   const userId = session?.user?.id ? (session.user.id as string) : undefined;
 
-  console.log({
-    "Session Cart Id": sessionCartId,
-    "User Id": userId,
-  });
-
   return { sessionCartId, userId };
 };
