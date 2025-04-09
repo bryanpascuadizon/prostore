@@ -2,7 +2,6 @@ import React from "react";
 import { getProductSlug } from "@/lib/actions/products.action";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import ProductPrice from "@/components/shared/product/product-price";
 import ProductImage from "@/components/shared/product/product-image";

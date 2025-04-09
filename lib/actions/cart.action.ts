@@ -6,7 +6,7 @@ import { checkSessionAndUserId } from "../session_utils";
 import { prisma } from "@/db/prisma";
 import { cartItemSchema, insertCartSchema } from "../validators";
 import { revalidatePath } from "next/cache";
-import { Cart, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const addItemToCart = async (data: CartItem) => {
   try {

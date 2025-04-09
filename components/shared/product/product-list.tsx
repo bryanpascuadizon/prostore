@@ -5,7 +5,6 @@ import { Product } from "@/types";
 const ProductList = ({
   data,
   title,
-  limit,
 }: {
   data: Product[];
   title?: string;

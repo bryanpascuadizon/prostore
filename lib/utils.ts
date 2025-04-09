@@ -1,8 +1,8 @@
-import { auth } from "@/auth";
 import { CartItem } from "@/types";
+import { Prisma } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
-import { cookies } from "next/headers";
 import { twMerge } from "tailwind-merge";
+import { ZodError } from "zod";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -17,26 +17,31 @@ export const formatNumberWithDecimal = (num: number): string => {
   return decimal ? `${int}.${decimal.padEnd(2, "0")}` : `${int}.00`;
 };
 
-// esline-disable-next-line @typescript-eslint/no-explicit-any
-//@ts-ignore
-export const formatError = (error: any) => {
-  if (error.name === "ZodError") {
-    //Handle Zod error
-    const fieldErrors = Object.keys(error.errors).map(
-      (field) => error.errors[field].message
-    );
-
+//@typescript-eslint/no-explicit-any
+export const formatError = (error: unknown): string => {
+  // Zod validation error
+  if (error instanceof ZodError) {
+    const fieldErrors = error.errors.map((err) => err.message);
     return fieldErrors.join("\n");
-  } else if (
-    error.name === "PrismaClientKnownRequestError" &&
+  }
+
+  // Prisma known client error (e.g., unique constraint violation)
+  if (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
     error.code === "P2002"
   ) {
-    //Handle Prisma error
-    const field = error.meta?.target ? error.meta.target[0] : "Field";
-    return `${field.charAt(0).toUpperCase() + field.slice(1)} already exist`;
-  } else {
-    //Handle other errors
+    const target = (error.meta as { target?: string[] })?.target;
+    const field = target?.[0] ?? "Field";
+    return `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
   }
+
+  // Fallback for other standard errors
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  // Unknown error type
+  return "An unexpected error occurred.";
 };
 
 const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
