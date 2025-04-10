@@ -18,6 +18,11 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
 import PlaceOrderForm from "@/components/shared/place-order/place-order-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Place Order",
+};
 
 const PlaceOrderPage = async () => {
   const cart = await getMyCart();
