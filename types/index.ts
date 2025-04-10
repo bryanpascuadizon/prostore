@@ -1,6 +1,8 @@
 import {
   cartItemSchema,
   insertCartSchema,
+  insertOrderItemSchema,
+  insertOrderSchema,
   insertProductSchema,
   shippingAddressSchema,
 } from "@/lib/validators";
